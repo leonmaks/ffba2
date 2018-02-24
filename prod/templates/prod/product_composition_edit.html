@@ -1,0 +1,43 @@
+{% extends "base_site.html" %}
+{% load widget_tweaks %}
+{% load i18n static %}
+
+{% block page_title %}
+  Product Composition
+{% endblock %}
+
+
+{% block page_content %}
+  <h1>Product Composition</h1>
+
+  <form method="post">{% csrf_token %}
+
+    {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+    {% endfor %}
+
+  {% for field in form.visible_fields %}
+    <div class="form-group">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field|add_class:'form-control' }}
+      {% for error in field.errors %}
+        <span class="help-inline text-danger">{{ error }}</span>
+      {% endfor %}
+      {% if field.help_text %}
+        <small class="form-text text-muted">{{ field.help_text }}</small>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  {% if detail_formset %}
+    {{ detail_formset.management_form }}
+    {{ detail_formset }}
+  {% endif %}
+
+  <div class="form-group">
+    <button type="success" class="btn btn-outline-success"><span class="fa fa-check"></span> Submit</button>
+    <a href="{% url 'prod:product-list' %}" class="btn btn-outline-secondary"><span class="fa fa-times"></span> Cancel (abandon changes)</a>
+  </div>
+</form>
+
+{% endblock %}

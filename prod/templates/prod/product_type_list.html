@@ -1,0 +1,45 @@
+{% extends "base_site.html" %}
+{% load widget_tweaks %}
+{% load i18n static %}
+
+{% block page_title %}
+  Product Type List
+{% endblock %}
+
+
+{% block page_content %}
+  <h1>Product Type List</h1>
+
+  {% if perms.prod.product_type_create %}
+    <p>
+      <a href={% url "prod:product-type-create" %}><span class="fa fa-plus"></span> Create</a>
+    </p>
+  {% endif %}
+
+{% if object_list %}
+  <table class="table">
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>Show Order</th>
+      <th>#</th>
+    </tr>
+  {% for rec in object_list %}
+    <tr>
+      <td>{{ rec.code }}</td>
+      <td>{{ rec.name }}</td>
+      <td>{{ rec.show_order }}</td>
+      <td>
+        {% if perms.prod.product_type_update %}
+          <a href={% url "prod:product-type-update" pk=rec.id %}>{{ rec.id }}</a>
+        {% else %}
+          {{ rec.id }}
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+    </table>
+  {% else %}
+    {% trans "No records" %}
+  {% endif %}
+{% endblock %}

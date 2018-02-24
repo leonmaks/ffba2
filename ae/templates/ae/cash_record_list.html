@@ -1,0 +1,50 @@
+{% extends "base_site.html" %}
+{% load i18n static %}
+
+{% block page_title %}
+  Cash Record List
+{% endblock %}
+
+
+{% block page_content %}
+  <h1>Cash Record List</h1>
+
+  {% if perms.ae.cash_record_create %}
+    <p>
+      <a href={% url "ae:cash-record-create" %}><span class="fa fa-plus"></span> Create</a>
+    </p>
+  {% endif %}
+
+  {% if object_list %}
+    <table class="table">
+      <tr>
+        <th>Cash Reg.</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Checks</th>
+        {% comment %} <th>URL</th> {% endcomment %}
+        <th>Created By</th>
+        <th>#</th>
+      </tr>
+      {% for rec in object_list %}
+        <tr>
+          <td>{{ rec.cash_register.name }}</td>
+          <td>{{ rec.record_date|date:"d.m.Y" }}</td>
+          <td>{{ rec.amount|floatformat:"2" }}</td>
+          <td>{{ rec.checks }}</td>
+          {% comment %} <td>{% if rec.url %}<a href={{ rec.url }}>@url</a>{% endif %}</td> {% endcomment %}
+          <td>{{ rec.create_user }}</td>
+          <td>
+              {% if perms.ae.cash_record_update %}
+                <a href={% url "ae:cash-record-update" pk=rec.id %}>{{ rec.id }}</a>
+              {% else %}
+                {{ rec.id }}
+              {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    {% trans "No records" %}
+  {% endif %}
+{% endblock %}

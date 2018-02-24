@@ -1,0 +1,47 @@
+{% extends "base_site.html" %}
+{% load widget_tweaks %}
+{% load i18n static %}
+
+{% block page_title %}
+  Product List
+{% endblock %}
+
+
+{% block page_content %}
+  <h1>Product List</h1>
+
+  {% if perms.prod.product_create %}
+    <p>
+      <a href={% url "prod:product-create" %}><span class="fa fa-plus"></span> Create</a>
+    </p>
+  {% endif %}
+
+{% if object_list %}
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <th>Desc</th>
+      <th>Type</th>
+      <th>Code</th>
+      <th>#</th>
+    </tr>
+  {% for rec in object_list %}
+    <tr>
+      <td>{{ rec.name }}</td>
+      <td>{{ rec.desc }}</td>
+      <td>{{ rec.product_type }}</td>
+      <td>{{ rec.code }}</td>
+      <td>
+        {% if perms.prod.product_update %}
+          <a href={% url "prod:product-update" pk=rec.id %}>{{ rec.id }}</a>
+        {% else %}
+          {{ rec.id }}
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+    </table>
+  {% else %}
+    {% trans "No records" %}
+  {% endif %}
+{% endblock %}
