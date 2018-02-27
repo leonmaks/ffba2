@@ -2,3 +2,4 @@
 /.vscode/
 *.pyc
 ffba/local_settings.py
+static_root
