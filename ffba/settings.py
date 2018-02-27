@@ -177,6 +177,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "ffba/static"),
 ]
 
+STATIC_ROOT = "/usr/home/ffba/.wsp/ffba_test/ffba2/static_root"
+
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_URL = "/logout/"
