@@ -1,0 +1,50 @@
+{% extends "base_site.html" %}
+{% load widget_tweaks %}
+{% load i18n static %}
+
+{% block page_title %}
+  Daily Sales
+{% endblock %}
+
+
+{% block page_content %}
+  <h1>Daily Sales</h1>
+
+  <!-- {% if perms.prod.product_create %}
+    <p>
+      <a href={% url "prod:product-create" %}><span class="fa fa-plus"></span> Create</a>
+    </p>
+  {% endif %} -->
+
+  {% if object_list %}
+    <table class="table">
+      <tr>
+        <th>Date</th>
+        <th>Cashreg</th>
+        <th>Expected</th>
+        <th>Actual</th>
+        <th>Lost</th>
+        {% comment %} <th>#</th> {% endcomment %}
+      </tr>
+  {% for rec in object_list %}
+    <tr>
+      <td>{{ rec.sales_date }}</td>
+      <td>{{ rec.cashreg_identity }}</td>
+      <td>{{ rec.expected_sales_value }}</td>
+      <td>{{ rec.actual_sales_value }}</td>
+      <td>{{ rec.lost_sales_value }}</td>
+      {% comment %} <td>
+        {% if perms.prod.product_update %}
+          <a href={% url "prod:product-update" pk=rec.id %}>{{ rec.id }}</a>
+        {% else %}
+          {{ rec.cashreg_id }}
+        {% endif %}
+      </td> {% endcomment %}
+    </tr>
+  {% endfor %}
+    </table>
+  {% else %}
+    {% trans "No records" %}
+  {% endif %}
+
+{% endblock %}

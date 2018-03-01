@@ -1,0 +1,45 @@
+{% extends "base_site.html" %}
+{% load widget_tweaks %}
+{% load i18n static %}
+
+{% block page_title %}
+  Sales Data by Cash Reg
+{% endblock %}
+
+
+{% block page_content %}
+  <h1>Sales Data by Cash Reg</h1>
+
+  <h2>{{ test }}</h2>
+
+  {% comment %} {% if perms.prod.product_create %}
+    <p>
+      <a href={% url "prod:product-create" %}><span class="fa fa-plus"></span> Create</a>
+    </p>
+  {% endif %}  {% endcomment %}
+
+  {% if object_list %}
+    <table class="table">
+      <tr>
+        <th>Cash Reg</th>
+        <th>Last Repl</th>
+        <th>#</th>
+      </tr>
+  {% for rec in object_list %}
+    <tr>
+      <td>{{ rec.identity }}</td>
+      <td>{{ rec.last_repl_dt }}</td>
+      <td>
+        {% comment %} {% if perms.prod.product_update %}
+          <a href={% url "prod:product-update" pk=rec.id %}>{{ rec.id }}</a>
+        {% else %} {% endcomment %}
+          {{ rec.id }}
+        {% comment %} {% endif %} {% endcomment %}
+      </td>
+    </tr>
+  {% endfor %}
+    </table>
+  {% else %}
+    {% trans "No records" %}
+  {% endif %}
+{% endblock %}

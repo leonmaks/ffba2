@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "org",
     "prod",
     "ae",
+    "rpt",
 ]
 
 # INSTALLED_APPS = [

@@ -59,7 +59,7 @@ class ProductCompositionEdit(LoginRequiredMixin, PermissionRequiredMixin, Master
     model = m.Product
     fields = ["name", "desc", "product_type", "code"]
     detail_formset_class = f.ProductCompositionFormSet
-    detail_queryset=m.ProductComposition.objects.filter(composition__exact=27)
+    detail_queryset = m.ProductComposition.objects.filter(composition__exact=27)
     template_name = "prod/product_composition_edit.html"
     success_url = reverse_lazy("prod:product-composition-edit")
     product_composition = None
