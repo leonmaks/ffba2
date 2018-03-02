@@ -107,6 +107,7 @@ def fetch_product_day_sales(cashreg_id, mday):
     stmt_ = (
         "SELECT p.reference AS product_reference,"
         " p.name AS product_name,"
+        " p.pricesell AS product_pricesell,"
         " SUM(tl.units) AS units,"
         " SUM(tl.units * p.pricesell) AS expected_sales_value,"
         " SUM(tl.units * tl.price) AS actual_sales_value,"
@@ -118,7 +119,7 @@ def fetch_product_day_sales(cashreg_id, mday):
         " AND t.id = tl.ticket AND t.siteguid = tl.siteguid"
         " AND tl.product = p.id AND tl.siteguid = p.siteguid"
         " AND r.datenew::date = %s"
-        " GROUP BY p.reference, p.name"
+        " GROUP BY product_reference, product_name, product_pricesell"
         " ORDER BY actual_sales_value DESC"
     )
 

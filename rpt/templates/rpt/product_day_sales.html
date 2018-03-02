@@ -23,14 +23,16 @@
       <tr>
         <th>Product Name</th>
         <th>Units</th>
-        <th>Expected Value</th>
-        <th>Actual Value</th>
-        <th>Lost Value</th>
+        <th>Price</th>
+        <th>Expected Sales</th>
+        <th>Actual Sales</th>
+        <th>Lost Sales</th>
       </tr>
   {% for rec in object_list %}
     <tr>
       <td>{{ rec.product_name }}</td>
       <td>{{ rec.units }}</td>
+      <td>{{ rec.product_pricesell }}</td>
       <td>{{ rec.expected_sales_value }}</td>
       <td>{{ rec.actual_sales_value }}</td>
       <td>{{ rec.lost_sales_value }}</td>
