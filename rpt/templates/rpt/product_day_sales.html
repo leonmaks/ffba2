@@ -3,12 +3,14 @@
 {% load i18n static %}
 
 {% block page_title %}
-  Daily Sales
+  Product Daily Sales
 {% endblock %}
 
 
 {% block page_content %}
-  <h1>Daily Sales</h1>
+  <h1>Product Daily Sales</h1>
+  <h2>Date: {{ sales_date }}; Cashreg: {{ cashreg.identity }}</h2>
+
 
   <!-- {% if perms.prod.product_create %}
     <p>
@@ -19,24 +21,16 @@
   {% if object_list %}
     <table class="table">
       <tr>
-        <th>Date</th>
-        <th>Cashreg</th>
+        <th>Product Name</th>
+        <th>Units</th>
         <th>Expected Value</th>
         <th>Actual Value</th>
         <th>Lost Value</th>
       </tr>
   {% for rec in object_list %}
     <tr>
-      <td>{{ rec.sales_date }}</td>
-      <td>
-        {% comment %} {% if perms.rpt.xxx %} {% endcomment %}
-          <a href={% url "rpt:product-day-sales" cashreg_id=rec.cashreg_id year=rec.sales_date.year month=rec.sales_date.month mday=rec.sales_date.day %}>
-            {{ rec.cashreg_identity }}
-          </a>
-        {% comment %} {% else %}
-          {{ rec.cashreg_identity }}
-        {% endif %} {% endcomment %}
-      </td>
+      <td>{{ rec.product_name }}</td>
+      <td>{{ rec.units }}</td>
       <td>{{ rec.expected_sales_value }}</td>
       <td>{{ rec.actual_sales_value }}</td>
       <td>{{ rec.lost_sales_value }}</td>

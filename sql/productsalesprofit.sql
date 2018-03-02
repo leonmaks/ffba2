@@ -11,7 +11,7 @@ SELECT p.reference,
   FROM (r$_ticketlines tl
         INNER JOIN r$_receipts r ON (tl.ticket = r.id))
         LEFT OUTER JOIN r$_products p ON (tl.product = p.id)
- WHERE r.datenew between '2018-03-01 00:00:00' and '2018-03-01 23:59:59'
+ WHERE r.datenew::date = '2018-03-01'
  GROUP BY tl.product, p.reference, p.name, p.pricebuy, p.pricesell
  ORDER BY expected_sales_value DESC
 ;

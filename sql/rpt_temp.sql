@@ -40,7 +40,9 @@ SELECT p.*, r.*
 ;
 
 SELECT cr.identity AS idn, r.datenew::date dy,
-       SUM(tl.price) AS actual_sales_value
+       SUM(tl.units * p.pricesell) AS expected_sales_value,
+       SUM(tl.price) AS actual_sales_value,
+       SUM(tl.units * p.pricesell) - SUM(tl.price) AS lost_sales_value
   FROM r$_products p, r$_ticketlines tl, r$_receipts r, ffba_cashreg cr
  WHERE r.siteguid = cr.siteguid
    AND tl.ticket = r.id AND tl.siteguid = r.siteguid
