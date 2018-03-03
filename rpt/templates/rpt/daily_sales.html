@@ -17,7 +17,7 @@
   {% endif %} -->
 
   {% if object_list %}
-    <table class="table table-hover">
+    <table class="table">
       <tr>
         <th>Date</th>
         {% comment %} <th>Cashreg</th> {% endcomment %}
@@ -27,13 +27,13 @@
       </tr>
       {% for rec in object_list %}
         <tr>
-          <td>
-            <label class="btn-outline-primary" for="{{ rec.sales_date }}">{{ rec.sales_date }}</label>
-            <input type="checkbox" name="{{ rec.sales_date }}" id="{{ rec.sales_date }}" data-toggle="ffba_toggle" style="display: none">
-          </td>
-          <td>{{ rec.expected_sales_value }}</td>
-          <td>{{ rec.actual_sales_value }}</td>
-          <td>{{ rec.lost_sales_value }}</td>
+            <td>
+              <label class="btn-outline-primary" for="{{ rec.sales_date }}"><b>{{ rec.sales_date }}</b></label>
+              <input type="checkbox" name="{{ rec.sales_date }}" id="{{ rec.sales_date }}" data-toggle="ffba_toggle" style="display: none">
+            </td>
+            <td>{{ rec.expected_sales_value }}</td>
+            <td>{{ rec.actual_sales_value }}</td>
+            <td>{{ rec.lost_sales_value }}</td>
         </tr>
         <tbody class="ffba_hide" style="display: none">
             {% for cr in rec.cashreg_recs %}
