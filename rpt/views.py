@@ -1,8 +1,10 @@
+from datetime import date
+
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import TemplateView
 from django.db import connection
 
-from datetime import date
+from . import data as d
 
 
 class SalesDataByOrgUnit(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -37,34 +39,37 @@ class DailySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 
     template_name = "rpt/daily_sales.html"
 
-    def fetch_data(self):
+    def get_context_data(self, **kwargs):
 
-        stmt_ = [(
-            "SELECT cr.identity AS cashreg_identity,"
-            " cr.id cashreg_id,"
-            " r.datenew::date sales_date,"
-            " SUM(tl.units * p.pricesell) AS expected_sales_value,"
-            " SUM(tl.units * tl.price) AS actual_sales_value,"
-            " SUM(tl.units * p.pricesell) - SUM(tl.units * tl.price) AS lost_sales_value"
-            " FROM r$_products p, r$_ticketlines tl, r$_receipts r, ffba_cashreg cr"
-            " WHERE r.siteguid = cr.siteguid"
-            " AND tl.ticket = r.id AND tl.siteguid = r.siteguid"
-            " AND p.id = tl.product AND p.siteguid = r.siteguid"
-            " GROUP BY cashreg_identity, cashreg_id, sales_date"
-            " ORDER BY sales_date DESC, cashreg_identity ASC"
-        ), ]
+        daily_sales_ = d.daily_sales()
 
-        with connection.cursor() as cursor:
-            cursor.execute(" ".join(stmt_))
-            columns = [col[0] for col in cursor.description]
-            return [
-                dict(zip(columns, row))
-                for row in cursor.fetchall()
-            ]
+        object_list_ = []
+        sales_ = {}
+        for s_ in daily_sales_:
+
+            if not sales_ or not sales_["sales_date"] == s_["sales_date"]:
+                sales_ = {
+                    "sales_date": s_["sales_date"],
+                    "expected_sales_value": 0,
+                    "actual_sales_value": 0,
+                    "lost_sales_value": 0,
+                    "cashreg_recs": [],
+                }
+                object_list_.append(sales_)
+
+            sales_["expected_sales_value"] += s_["expected_sales_value"]
+            sales_["actual_sales_value"] += s_["actual_sales_value"]
+            sales_["lost_sales_value"] += s_["lost_sales_value"]
+            sales_["cashreg_recs"].append(s_)
+
+        ctx_ = {
+            "object_list": object_list_,
+        }
+
+        return super().get_context_data(**ctx_)
 
     def get(self, request, *args, **kwargs):
-        # context = self.get_context_data(object=self.object)
-        return self.render_to_response({"object_list": self.fetch_data()})
+        return self.render_to_response(self.get_context_data(**kwargs))
 
 
 class ProductDaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -74,59 +79,17 @@ class ProductDaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
 
     def get_context_data(self, **kwargs):
         date_ = date(int(kwargs["year"]), int(kwargs["month"]), int(kwargs["mday"]))
+
+        cashreg_ = d.cashreg(kwargs["cashreg_id"])
+        object_list_ = d.product_day_sales(cashreg_["siteguid"], date_)
+
         ctx_ = {
-            "cashreg": fetch_cashreg_data(kwargs["cashreg_id"]),
+            "cashreg": cashreg_,
             "sales_date": date_,
-            "object_list": fetch_product_day_sales(kwargs["cashreg_id"], date_),
+            "object_list": object_list_,
         }
+
         return super().get_context_data(**ctx_)
 
     def get(self, request, *args, **kwargs):
         return self.render_to_response(self.get_context_data(**kwargs))
-
-
-def fetch_cashreg_data(cashreg_id):
-
-    stmt_ = (
-        "SELECT cr.id, cr.identity, cr.siteguid"
-        " FROM ffba_cashreg cr"
-        " WHERE cr.id = %s"
-    )
-
-    with connection.cursor() as cursor:
-        cursor.execute(stmt_, (cashreg_id, ))
-        columns = [col[0] for col in cursor.description]
-        return [
-            dict(zip(columns, row))
-            for row in cursor.fetchall()
-        ][0]
-
-
-def fetch_product_day_sales(cashreg_id, mday):
-
-    stmt_ = (
-        "SELECT p.reference AS product_reference,"
-        " p.name AS product_name,"
-        " p.pricesell AS product_pricesell,"
-        " SUM(tl.units) AS units,"
-        " SUM(tl.units * p.pricesell) AS expected_sales_value,"
-        " SUM(tl.units * tl.price) AS actual_sales_value,"
-        " SUM(tl.units * p.pricesell) - SUM(tl.units * tl.price) AS lost_sales_value"
-        " FROM ffba_cashreg cr, r$_receipts r, r$_tickets t, r$_ticketlines tl, r$_products p"
-        " WHERE cr.id = %s"
-        " AND cr.siteguid = r.siteguid"
-        " AND r.id = t.id AND r.siteguid = t.siteguid"
-        " AND t.id = tl.ticket AND t.siteguid = tl.siteguid"
-        " AND tl.product = p.id AND tl.siteguid = p.siteguid"
-        " AND r.datenew::date = %s"
-        " GROUP BY product_reference, product_name, product_pricesell"
-        " ORDER BY actual_sales_value DESC"
-    )
-
-    with connection.cursor() as cursor:
-        cursor.execute(stmt_, (cashreg_id, mday))
-        columns = [col[0] for col in cursor.description]
-        return [
-            dict(zip(columns, row))
-            for row in cursor.fetchall()
-        ]

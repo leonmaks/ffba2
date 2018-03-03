@@ -17,34 +17,57 @@
   {% endif %} -->
 
   {% if object_list %}
-    <table class="table">
+    <table class="table table-hover">
       <tr>
         <th>Date</th>
-        <th>Cashreg</th>
+        {% comment %} <th>Cashreg</th> {% endcomment %}
         <th>Expected Value</th>
         <th>Actual Value</th>
         <th>Lost Value</th>
       </tr>
-  {% for rec in object_list %}
-    <tr>
-      <td>{{ rec.sales_date }}</td>
-      <td>
-        {% comment %} {% if perms.rpt.xxx %} {% endcomment %}
-          <a href={% url "rpt:product-day-sales" cashreg_id=rec.cashreg_id year=rec.sales_date.year month=rec.sales_date.month mday=rec.sales_date.day %}>
-            {{ rec.cashreg_identity }}
-          </a>
-        {% comment %} {% else %}
-          {{ rec.cashreg_identity }}
-        {% endif %} {% endcomment %}
-      </td>
-      <td>{{ rec.expected_sales_value }}</td>
-      <td>{{ rec.actual_sales_value }}</td>
-      <td>{{ rec.lost_sales_value }}</td>
-    </tr>
-  {% endfor %}
+      {% for rec in object_list %}
+        <tr>
+          <td>
+            <label class="btn-outline-primary" for="{{ rec.sales_date }}">{{ rec.sales_date }}</label>
+            <input type="checkbox" name="{{ rec.sales_date }}" id="{{ rec.sales_date }}" data-toggle="ffba_toggle" style="display: none">
+          </td>
+          <td>{{ rec.expected_sales_value }}</td>
+          <td>{{ rec.actual_sales_value }}</td>
+          <td>{{ rec.lost_sales_value }}</td>
+        </tr>
+        <tbody class="ffba_hide" style="display: none">
+            {% for cr in rec.cashreg_recs %}
+              <tr>
+                <td>
+                  {% comment %} {% if perms.rpt.xxx %} {% endcomment %}
+                    <a href={% url "rpt:product-day-sales" cashreg_id=cr.cashreg_id year=cr.sales_date.year month=cr.sales_date.month mday=cr.sales_date.day %}>
+                      {{ cr.cashreg_identity }}
+                    </a>
+                  {% comment %} {% else %}
+                    {{ cr.cashreg_identity }}
+                  {% endif %} {% endcomment %}
+                </td>
+                <td>{{ cr.expected_sales_value }}</td>
+                <td>{{ cr.actual_sales_value }}</td>
+                <td>{{ cr.lost_sales_value }}</td>
+              </tr>
+            {% endfor %}
+        </tbody>
+      {% endfor %}
     </table>
   {% else %}
     {% trans "No records" %}
   {% endif %}
 
+{% endblock %}
+
+
+{% block page_bottom_ext %}
+  <script>
+      $(document).ready(function() {
+        $('[data-toggle="ffba_toggle"]').change(function(){
+          $(this).parents().next('.ffba_hide').toggle();
+        });
+      });
+  </script>
 {% endblock %}

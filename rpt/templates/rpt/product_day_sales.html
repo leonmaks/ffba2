@@ -3,12 +3,12 @@
 {% load i18n static %}
 
 {% block page_title %}
-  Product Daily Sales
+  Product Day Sales
 {% endblock %}
 
 
 {% block page_content %}
-  <h1>Product Daily Sales</h1>
+  <h1>Product Day Sales</h1>
   <h2>Date: {{ sales_date }}; Cashreg: {{ cashreg.identity }}</h2>
 
 
@@ -24,9 +24,9 @@
         <th>Product Name</th>
         <th>Units</th>
         <th>Price</th>
-        <th>Expected Sales</th>
-        <th>Actual Sales</th>
-        <th>Lost Sales</th>
+        <th>Expected Value</th>
+        <th>Actual Value</th>
+        <th>Lost Value</th>
       </tr>
   {% for rec in object_list %}
     <tr>
