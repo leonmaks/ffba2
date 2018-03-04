@@ -1,0 +1,71 @@
+{% extends "base_site.html" %}
+{% load widget_tweaks %}
+{% load i18n static %}
+
+{% block page_title %}
+  Product Day Sales
+{% endblock %}
+
+
+{% block page_content %}
+  <h1>Product Day Sales</h1>
+  <h2>Date: {{ sales_date }}; Cashreg: {{ cashreg.identity }}</h2>
+
+
+  <!-- {% if perms.prod.product_create %}
+    <p>
+      <a href={% url "prod:product-create" %}><span class="fa fa-plus"></span> Create</a>
+    </p>
+  {% endif %} -->
+
+  {% if product_day_sales %}
+    <h3>Total Day Sales</h3>
+    <table class="table">
+      <tr>
+        <th>Product Name</th>
+        <th>Units</th>
+        <th>Price</th>
+        <th>Expected Value</th>
+        <th>Actual Value</th>
+        <th>Lost Value</th>
+      </tr>
+    {% for rec in product_day_sales %}
+      <tr>
+        <td>{{ rec.product_name }}</td>
+        <td>{{ rec.units }}</td>
+        <td>{{ rec.product_pricesell }}</td>
+        <td>{{ rec.expected_sales_value }}</td>
+        <td>{{ rec.actual_sales_value }}</td>
+        <td>{{ rec.lost_sales_value }}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  {% else %}
+    {% trans "No records" %}
+  {% endif %}
+
+  {% if product_day_sales_fractional_units %}
+    <h3>Fractional Day Sales</h3>
+    <table class="table">
+      <tr>
+        <th>Product #</th>
+        <th>Product Name</th>
+        <th>Units</th>
+        <th>Price</th>
+        <th>Actual Value</th>
+      </tr>
+    {% for rec in product_day_sales_fractional_units %}
+      <tr>
+        <td>{{ rec.product_reference }}</td>
+        <td>{{ rec.product_name }}</td>
+        <td>{{ rec.units }}</td>
+        <td>{{ rec.product_pricesell }}</td>
+        <td>{{ rec.actual_sales_value }}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  {% else %}
+    {% trans "No records" %}
+  {% endif %}
+
+{% endblock %}

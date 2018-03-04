@@ -1,4 +1,6 @@
 from datetime import date
+from math import floor, ceil
+from operator import itemgetter
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import TemplateView
@@ -79,17 +81,100 @@ class ProductDaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
 
     def get_context_data(self, **kwargs):
         date_ = date(int(kwargs["year"]), int(kwargs["month"]), int(kwargs["mday"]))
-
         cashreg_ = d.cashreg(kwargs["cashreg_id"])
-        object_list_ = d.product_day_sales(cashreg_["siteguid"], date_)
+
+        product_day_sales_detail_ = d.product_day_sales_detail(cashreg_["siteguid"], date_)
+
+        product_day_sales_ = []
+        sales_ = {}
+        totals_ = {
+            "units": 0,
+            "actual_sales_value": 0,
+            "fractional_units": 0,
+            "fractional_expected_sales_value": 0,
+            "fractional_actual_sales_value": 0,
+            "fractional_lost_sales_value": 0,
+        }
+        for d_ in product_day_sales_detail_:
+
+            if not sales_ or not sales_["product_reference"] == d_["product_reference"]:
+                sales_ = {
+                    "product_reference": d_["product_reference"],
+                    "product_name": d_["product_name"],
+                    "product_pricesell": d_["product_pricesell"],
+                    "units": 0.0,
+                    "actual_sales_value": 0,
+                    "fractional_units": 0,
+                    "fractional_expected_sales_value": 0,
+                    "fractional_actual_sales_value": 0,
+                    "fractional_lost_sales_value": 0,
+                    "detail_recs": [],
+                }
+                product_day_sales_.append(sales_)
+
+            units_ = d_["units"]
+            if units_ - floor(units_) > 0:
+
+                fractional_units_ = ceil(units_)
+                fractional_expected_sales_value_ = fractional_units_ * d_["product_pricesell"]
+                fractional_lost_sales_value_ = fractional_expected_sales_value_ - d_["actual_sales_value"]
+
+                d_["fractional_units"] = fractional_units_
+                d_["fractional_expected_sales_value"] = fractional_expected_sales_value_
+                d_["fractional_actual_sales_value"] = d_["actual_sales_value"]
+                d_["fractional_lost_sales_value"] = fractional_lost_sales_value_
+
+                sales_["fractional_units"] += fractional_units_
+                sales_["fractional_expected_sales_value"] += fractional_expected_sales_value_
+                sales_["fractional_actual_sales_value"] += d_["actual_sales_value"]
+                sales_["fractional_lost_sales_value"] += fractional_lost_sales_value_
+
+                totals_["fractional_units"] += fractional_units_
+                totals_["fractional_expected_sales_value"] += fractional_expected_sales_value_
+                totals_["fractional_actual_sales_value"] += d_["actual_sales_value"]
+                totals_["fractional_lost_sales_value"] += fractional_lost_sales_value_
+
+            sales_["units"] += units_
+            sales_["actual_sales_value"] += d_["actual_sales_value"]
+            sales_["detail_recs"].append(d_)
+
+            totals_["units"] += units_
+            totals_["actual_sales_value"] += d_["actual_sales_value"]
 
         ctx_ = {
             "cashreg": cashreg_,
             "sales_date": date_,
-            "object_list": object_list_,
+            "product_day_sales": sorted(product_day_sales_, key=itemgetter("actual_sales_value"), reverse=True),
+            "totals": totals_,
         }
 
         return super().get_context_data(**ctx_)
 
     def get(self, request, *args, **kwargs):
         return self.render_to_response(self.get_context_data(**kwargs))
+
+
+# class ProductDaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+#     permission_required = ("rpt.xxx")
+
+#     template_name = "rpt/product_day_sales.html"
+
+#     def get_context_data(self, **kwargs):
+#         date_ = date(int(kwargs["year"]), int(kwargs["month"]), int(kwargs["mday"]))
+
+#         cashreg_ = d.cashreg(kwargs["cashreg_id"])
+#         product_day_sales_ = d.product_day_sales(cashreg_["siteguid"], date_)
+
+#         product_day_sales_fractional_units_ = d.product_day_sales_fractional_units(cashreg_["siteguid"], date_)
+
+#         ctx_ = {
+#             "cashreg": cashreg_,
+#             "sales_date": date_,
+#             "product_day_sales": product_day_sales_,
+#             "product_day_sales_fractional_units": product_day_sales_fractional_units_,
+#         }
+
+#         return super().get_context_data(**ctx_)
+
+#     def get(self, request, *args, **kwargs):
+#         return self.render_to_response(self.get_context_data(**kwargs))

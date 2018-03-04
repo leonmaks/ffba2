@@ -71,3 +71,56 @@ def product_day_sales(siteguid, mday):
             dict(zip(columns, row))
             for row in cursor.fetchall()
         ]
+
+
+def product_day_sales_detail(siteguid, mday):
+
+    stmt_ = (
+        "SELECT p.reference AS product_reference,"
+        " p.name AS product_name,"
+        " p.pricesell AS product_pricesell,"
+        " tl.units AS units,"
+        " tl.units * tl.price AS actual_sales_value"
+        " FROM r$_receipts r, r$_tickets t, r$_ticketlines tl, r$_products p"
+        " WHERE r.siteguid = %s"
+        " AND r.datenew::date = %s"
+        " AND r.id = t.id AND r.siteguid = t.siteguid"
+        " AND t.id = tl.ticket AND t.siteguid = tl.siteguid"
+        " AND tl.product = p.id AND tl.siteguid = p.siteguid"
+        " ORDER BY product_reference ASC, units DESC"
+    )
+
+    with connection.cursor() as cursor:
+        cursor.execute(stmt_, (siteguid, mday))
+        columns = [col[0] for col in cursor.description]
+        return [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]
+
+
+def product_day_sales_fractional_units(siteguid, mday):
+
+    stmt_ = (
+        "SELECT p.reference AS product_reference,"
+        " p.name AS product_name,"
+        " tl.units AS units,"
+        " p.pricesell AS product_pricesell,"
+        " tl.units * tl.price AS actual_sales_value"
+        " FROM r$_receipts r, r$_tickets t, r$_ticketlines tl, r$_products p"
+        " WHERE r.siteguid = %s"
+        " AND r.id = t.id AND r.siteguid = t.siteguid"
+        " AND t.id = tl.ticket AND t.siteguid = tl.siteguid"
+        " AND tl.product = p.id AND tl.siteguid = p.siteguid"
+        " AND tl.units - ceil(tl.units) != 0"
+        " AND r.datenew::date = %s"
+        " ORDER BY actual_sales_value DESC"
+    )
+
+    with connection.cursor() as cursor:
+        cursor.execute(stmt_, (siteguid, mday))
+        columns = [col[0] for col in cursor.description]
+        return [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]
