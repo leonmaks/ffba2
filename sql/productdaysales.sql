@@ -1,3 +1,19 @@
+
+SELECT p.reference AS product_reference,
+ p.name AS product_name,
+ p.pricesell AS product_pricesell,
+ tl.units AS units,
+ tl.units * tl.price AS actual_sales_value
+ FROM r$_receipts r, r$_tickets t, r$_ticketlines tl, r$_products p
+ WHERE r.siteguid = '87011394-b5a6-46bf-b332-ca2f78b569f1'
+ AND r.datenew::date = '2018-03-01'
+ AND r.id = t.id AND r.siteguid = t.siteguid
+ AND t.id = tl.ticket AND t.siteguid = tl.siteguid
+ AND tl.product = p.id AND tl.siteguid = p.siteguid
+ ORDER BY product_reference ASC, units DESC
+;
+
+
 /*
  * Продажи за день,
  * в которых количество (units)
@@ -71,3 +87,5 @@ SELECT * FROM r$_receipts r WHERE id = '6cced27e-bceb-4b8b-a27d-15f913485989'
 
 select * from ffba_cashreg
 ;
+
+

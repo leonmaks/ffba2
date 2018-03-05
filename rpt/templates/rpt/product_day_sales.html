@@ -40,8 +40,8 @@
     <table class="table">
       <tr>
         <th>Product Name</th>
-        <th>Price</th>
         <th>Un.</th>
+        <th>Price</th>
         <th>Act.S.V.</th>
         <th>Fr.Un.</th>
         <th>Fr.Los.S.V.</th>
@@ -50,8 +50,8 @@
     {% for rec in product_day_sales %}
       <tr>
         <td>{{ rec.product_name }}</td>
-        <td>{{ rec.product_pricesell }}</td>
         <td>{{ rec.units }}</td>
+        <td>{{ rec.product_pricesell }}</td>
         <td>{{ rec.actual_sales_value }}</td>
         <td>{{ rec.fractional_units }}</td>
         <td>{{ rec.fractional_lost_sales_value }}</td>
