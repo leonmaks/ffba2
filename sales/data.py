@@ -73,14 +73,15 @@ def product_day_sales(siteguid, mday):
         ]
 
 
-def product_day_sales_detail(siteguid, mday):
+def day_sales_detail(siteguid, mday):
 
     stmt_ = (
         "SELECT p.reference AS product_reference,"
         " p.name AS product_name,"
         " p.pricesell AS product_pricesell,"
         " tl.units AS units,"
-        " tl.units * tl.price AS actual_sales_value"
+        " tl.units * tl.price AS actual_sales_value,"
+        " r.datenew sales_date"
         " FROM r$_receipts r, r$_tickets t, r$_ticketlines tl, r$_products p"
         " WHERE r.siteguid = %s"
         " AND r.datenew::date = %s"

@@ -45,8 +45,8 @@ INSTALLED_APPS = [
     "misc",
     "org",
     "prod",
+    "sales",
     "ae",
-    "rpt",
 ]
 
 # INSTALLED_APPS = [

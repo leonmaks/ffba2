@@ -9,8 +9,8 @@ from . import views as v
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("prod/", include("prod.urls")),
+    path("sales/", include("sales.urls")),
     path("ae/", include("ae.urls")),
-    path("rpt/", include("rpt.urls")),
     path(r"login/", auth_v.login, name="login"),
     path(r"logout/", auth_v.logout, {'next_page': reverse_lazy("home")}, name="logout"),
     path(r"password-change/?", auth_v.password_change, name="password-change"),

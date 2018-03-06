@@ -74,28 +74,30 @@ class DailySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
         return self.render_to_response(self.get_context_data(**kwargs))
 
 
-class ProductDaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+class DaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     permission_required = ("rpt.xxx")
 
-    template_name = "rpt/product_day_sales.html"
+    template_name = "rpt/day_sales.html"
 
     def get_context_data(self, **kwargs):
         date_ = date(int(kwargs["year"]), int(kwargs["month"]), int(kwargs["mday"]))
         cashreg_ = d.cashreg(kwargs["cashreg_id"])
 
-        product_day_sales_detail_ = d.product_day_sales_detail(cashreg_["siteguid"], date_)
+        day_sales_detail_ = d.day_sales_detail(cashreg_["siteguid"], date_)
 
         product_day_sales_ = []
         sales_ = {}
         totals_ = {
             "units": 0,
             "actual_sales_value": 0,
+            "expected_sales_value": 0,
+            "dscn_lost_sales_value": 0,
             "fractional_units": 0,
-            "fractional_expected_sales_value": 0,
             "fractional_actual_sales_value": 0,
+            "fractional_expected_sales_value": 0,
             "fractional_lost_sales_value": 0,
         }
-        for d_ in product_day_sales_detail_:
+        for d_ in day_sales_detail_:
 
             if not sales_ or not sales_["product_reference"] == d_["product_reference"]:
                 sales_ = {
@@ -104,9 +106,11 @@ class ProductDaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
                     "product_pricesell": d_["product_pricesell"],
                     "units": 0.0,
                     "actual_sales_value": 0,
+                    "expected_sales_value": 0,
+                    "dscn_lost_sales_value": 0,
                     "fractional_units": 0,
-                    "fractional_expected_sales_value": 0,
                     "fractional_actual_sales_value": 0,
+                    "fractional_expected_sales_value": 0,
                     "fractional_lost_sales_value": 0,
                     "detail_recs": [],
                 }
@@ -124,6 +128,9 @@ class ProductDaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
                 d_["fractional_actual_sales_value"] = d_["actual_sales_value"]
                 d_["fractional_lost_sales_value"] = fractional_lost_sales_value_
 
+                d_["expected_sales_value"] = d_["fractional_expected_sales_value"]
+                d_["dscn_lost_sales_value"] = 0
+
                 sales_["fractional_units"] += fractional_units_
                 sales_["fractional_expected_sales_value"] += fractional_expected_sales_value_
                 sales_["fractional_actual_sales_value"] += d_["actual_sales_value"]
@@ -134,18 +141,37 @@ class ProductDaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
                 totals_["fractional_actual_sales_value"] += d_["actual_sales_value"]
                 totals_["fractional_lost_sales_value"] += fractional_lost_sales_value_
 
+            else:
+
+                d_["expected_sales_value"] = d_["product_pricesell"] * units_
+                d_["dscn_lost_sales_value"] = d_["expected_sales_value"] - d_["actual_sales_value"]
+
+                d_["fractional_units"] = 0
+                d_["fractional_expected_sales_value"] = 0
+                d_["fractional_actual_sales_value"] = 0
+                d_["fractional_lost_sales_value"] = 0
+
             sales_["units"] += units_
             sales_["actual_sales_value"] += d_["actual_sales_value"]
+            sales_["expected_sales_value"] += d_["expected_sales_value"]
+            sales_["dscn_lost_sales_value"] += d_["dscn_lost_sales_value"]
             sales_["detail_recs"].append(d_)
 
             totals_["units"] += units_
             totals_["actual_sales_value"] += d_["actual_sales_value"]
+            totals_["expected_sales_value"] += d_["expected_sales_value"]
+            totals_["dscn_lost_sales_value"] += d_["dscn_lost_sales_value"]
 
         ctx_ = {
             "cashreg": cashreg_,
             "sales_date": date_,
-            "product_day_sales": sorted(product_day_sales_, key=itemgetter("actual_sales_value"), reverse=True),
             "totals": totals_,
+            "product_day_sales":
+                # Sort list of dictionaries by values of the dictionary:
+                # https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-values-of-the-dictionary-in-python
+                sorted(product_day_sales_, key=itemgetter("actual_sales_value"), reverse=True),
+            "day_sales_recs":
+                sorted(day_sales_detail_, key=itemgetter("sales_date")),
         }
 
         return super().get_context_data(**ctx_)
@@ -154,7 +180,7 @@ class ProductDaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
         return self.render_to_response(self.get_context_data(**kwargs))
 
 
-# class ProductDaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+# class DaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 #     permission_required = ("rpt.xxx")
 
 #     template_name = "rpt/product_day_sales.html"

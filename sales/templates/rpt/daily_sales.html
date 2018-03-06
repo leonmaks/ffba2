@@ -39,8 +39,8 @@
             {% for cr in rec.cashreg_recs %}
               <tr>
                 <td>
-                  {% comment %} {% if perms.rpt.xxx %} {% endcomment %}
-                    <a href={% url "rpt:product-day-sales" cashreg_id=cr.cashreg_id year=cr.sales_date.year month=cr.sales_date.month mday=cr.sales_date.day %}>
+                  {% comment %} {% if perms.sales.xxx %} {% endcomment %}
+                    <a href={% url "sales:day-sales" cashreg_id=cr.cashreg_id year=cr.sales_date.year month=cr.sales_date.month mday=cr.sales_date.day %}>
                       {{ cr.cashreg_identity }}
                     </a>
                   {% comment %} {% else %}
