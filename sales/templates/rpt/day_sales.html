@@ -148,7 +148,13 @@
           {% endif %}
         </td>
 
-        <td>{{ rec.fractional_units }}</td>
+        <td>
+          {% if rec.fractional_units %}
+            {{ rec.fractional_units|floatformat:"-2" }}
+          {% else %}
+            -
+          {% endif %}
+        </td>
 
         <td>
           {% if rec.fractional_expected_sales_value %}
@@ -192,7 +198,7 @@
       </tr>
     {% for rec in day_sales_recs %}
       <tr>
-        <td>{{ rec.sales_date|time }}</td>
+        <td>{{ rec.sales_date|time:"H:i:s" }}</td>
         <td>{{ rec.product_name }}</td>
 
         <td>
