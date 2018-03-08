@@ -119,10 +119,11 @@ class DaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
             units_ = d_["units"]
             if units_ - floor(units_) > 0:
 
-                fractional_units_ = ceil(units_)
+                units_ = fractional_units_ = ceil(units_)
                 fractional_expected_sales_value_ = fractional_units_ * d_["product_pricesell"]
                 fractional_lost_sales_value_ = fractional_expected_sales_value_ - d_["actual_sales_value"]
 
+                d_["units"] = units_
                 d_["fractional_units"] = fractional_units_
                 d_["fractional_expected_sales_value"] = fractional_expected_sales_value_
                 d_["fractional_actual_sales_value"] = d_["actual_sales_value"]
@@ -150,6 +151,8 @@ class DaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
                 d_["fractional_expected_sales_value"] = 0
                 d_["fractional_actual_sales_value"] = 0
                 d_["fractional_lost_sales_value"] = 0
+
+            d_["dscn_rate"] = 100 - (d_["actual_sales_value"] / d_["expected_sales_value"] * 100)
 
             sales_["units"] += units_
             sales_["actual_sales_value"] += d_["actual_sales_value"]

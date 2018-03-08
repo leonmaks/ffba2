@@ -2,6 +2,8 @@
 {% load widget_tweaks %}
 {% load i18n static %}
 
+{% load misc_template_lib %}
+
 {% block page_title %}
   Day Sales
 {% endblock %}
@@ -25,64 +27,14 @@
         <th>Fr.Los.S.V.</th>
       </tr>
       <tr>
-        <td>
-          {% if totals.units %}
-            {{ totals.units|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if totals.actual_sales_value %}
-            {{ totals.actual_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if totals.expected_sales_value %}
-            {{ totals.expected_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if totals.dscn_lost_sales_value %}
-            {{ totals.dscn_lost_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
+        <td>{{ totals.units|float_format_0_2 }}</td>
+        <td>{{ totals.actual_sales_value|float_format_0_2 }}</td>
+        <td>{{ totals.expected_sales_value|float_format_0_2 }}</td>
+        <td>{{ totals.dscn_lost_sales_value|float_format_0_2 }}</td>
         <td>{{ totals.fractional_units }}</td>
-
-        <td>
-          {% if totals.fractional_actual_sales_value %}
-            {{ totals.fractional_actual_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if totals.fractional_expected_sales_value %}
-            {{ totals.fractional_expected_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if totals.fractional_lost_sales_value %}
-            {{ totals.fractional_lost_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
+        <td>{{ totals.fractional_actual_sales_value|float_format_0_2 }}</td>
+        <td>{{ totals.fractional_expected_sales_value|float_format_0_2 }}</td>
+        <td>{{ totals.fractional_lost_sales_value|float_format_0_2 }}</td>
       </tr>
     </table>
   {% else %}
@@ -107,71 +59,14 @@
     {% for rec in product_day_sales %}
       <tr>
         <td>{{ rec.product_name }}</td>
-
-        <td>
-          {% if rec.units %}
-            {{ rec.units|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if rec.product_pricesell %}
-            {{ rec.product_pricesell|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if rec.actual_sales_value %}
-            {{ rec.actual_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if rec.expected_sales_value %}
-            {{ rec.expected_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if rec.dscn_lost_sales_value %}
-            {{ rec.dscn_lost_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if rec.fractional_units %}
-            {{ rec.fractional_units|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if rec.fractional_expected_sales_value %}
-            {{ rec.fractional_expected_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if rec.fractional_lost_sales_value %}
-            {{ rec.fractional_lost_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
+        <td>{{ rec.units|float_format_0_2 }}</td>
+        <td>{{ rec.product_pricesell|float_format_0_2 }}</td>
+        <td>{{ rec.actual_sales_value|float_format_0_2 }}</td>
+        <td>{{ rec.expected_sales_value|float_format_0_2 }}</td>
+        <td>{{ rec.dscn_lost_sales_value|float_format_0_2 }}</td>
+        <td>{{ rec.fractional_units|float_format_0_2 }}</td>
+        <td>{{ rec.fractional_expected_sales_value|float_format_0_2 }}</td>
+        <td>{{ rec.fractional_lost_sales_value|float_format_0_2 }}</td>
         <td>{{ rec.product_reference }}</td>
       </tr>
     {% endfor %}
@@ -190,6 +85,7 @@
         <th>Price</th>
         <th>Act.S.V.</th>
         <th>Exp.S.V.</th>
+        <th>Dis.%</th>
         <th>Los.S.V.</th>
         <th>Fr.Un.</th>
         {% comment %} <th>Fr.Act.S.V.</th> {% endcomment %}
@@ -200,71 +96,14 @@
       <tr>
         <td>{{ rec.sales_date|time:"H:i:s" }}</td>
         <td>{{ rec.product_name }}</td>
-
-        <td>
-          {% if rec.units %}
-            {{ rec.units|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if rec.product_pricesell %}
-            {{ rec.product_pricesell|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if rec.actual_sales_value %}
-            {{ rec.actual_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if rec.expected_sales_value %}
-            {{ rec.expected_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if rec.dscn_lost_sales_value %}
-            {{ rec.dscn_lost_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        <td>
-          {% if rec.fractional_units %}
-            {{ rec.fractional_units|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
-        {% comment %} <td>
-          {% if rec.fractional_actual_sales_value %}
-            {{ rec.fractional_actual_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td> {% endcomment %}
-
-        <td>
-          {% if rec.fractional_lost_sales_value %}
-            {{ rec.fractional_lost_sales_value|floatformat:"-2" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
-
+        <td>{{ rec.units|float_format_0_2 }}</td>
+        <td>{{ rec.product_pricesell|float_format_0_2 }}</td>
+        <td>{{ rec.actual_sales_value|float_format_0_2 }}</td>
+        <td>{{ rec.expected_sales_value|float_format_0_2 }}</td>
+        <td>{{ rec.dscn_rate|float_format_0_2:"-,0" }}</td>
+        <td>{{ rec.dscn_lost_sales_value|float_format_0_2 }}</td>
+        <td>{{ rec.fractional_units|float_format_0_2 }}</td>
+        <td>{{ rec.fractional_lost_sales_value|float_format_0_2 }}</td>
         <td>{{ rec.product_reference }}</td>
       </tr>
     {% endfor %}
