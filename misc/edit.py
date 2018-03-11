@@ -60,7 +60,7 @@ class BaseMasterDetailEditView(ModelFormMixin, ProcessFormView):
         from prod import models as m
         if detail_formset_class is None:
             detail_formset_class = self.get_detail_formset_class()
-        return detail_formset_class(queryset=m.ProductComposition.objects.filter(composition__exact=m.Product(pk=27)))
+        return detail_formset_class(queryset=m.ProductComposition.objects.filter(up__exact=m.Product(pk=27)))
         # return detail_formset_class(self.get_detail_queryset())
 
     def get_detail_queryset(self):

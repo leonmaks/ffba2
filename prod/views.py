@@ -43,23 +43,23 @@ class ProductList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 class ProductCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = ("prod.product_create")
     model = m.Product
-    fields = ["name", "desc", "product_type", "code"]
+    fields = ["name", "note", "product_type", "code"]
     template_name = "prod/product.html"
 
 
 class ProductUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     permission_required = ("prod.product_update")
     model = m.Product
-    fields = ["name", "desc", "product_type", "code"]
+    fields = ["name", "note", "product_type", "code"]
     template_name = "prod/product.html"
 
 
 class ProductCompositionEdit(LoginRequiredMixin, PermissionRequiredMixin, MasterDetailEditView):
     permission_required = ("prod.product_composition_list")
     model = m.Product
-    fields = ["name", "desc", "product_type", "code"]
+    fields = ["name", "note", "product_type", "code"]
     detail_formset_class = f.ProductCompositionFormSet
-    detail_queryset = m.ProductComposition.objects.filter(composition__exact=27)
+    detail_queryset = m.ProductComposition.objects.filter(up__exact=27)
     template_name = "prod/product_composition_edit.html"
     success_url = reverse_lazy("prod:product-composition-edit")
     product_composition = None

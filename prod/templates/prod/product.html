@@ -3,12 +3,12 @@
 {% load i18n static %}
 
 {% block page_title %}
-  Product
+  Product Composition
 {% endblock %}
 
 
 {% block page_content %}
-  <h1>Product</h1>
+  <h1>Product Composition</h1>
 
   <form method="post">{% csrf_token %}
 
@@ -16,23 +16,26 @@
       {{ hidden }}
     {% endfor %}
 
-  {% for field in form.visible_fields %}
-    <div class="form-group">
-      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-      {{ field|add_class:'form-control' }}
-      {% for error in field.errors %}
-        <span class="help-inline text-danger">{{ error }}</span>
-      {% endfor %}
-      {% if field.help_text %}
-        <small class="form-text text-muted">{{ field.help_text }}</small>
-      {% endif %}
-    </div>
-  {% endfor %}
+    <h2>Product</h2>
 
-  <div class="form-group">
-    <button type="success" class="btn btn-outline-success"><span class="fa fa-check"></span> Submit</button>
-    <a href="{% url 'prod:product-list' %}" class="btn btn-outline-secondary"><span class="fa fa-times"></span> Cancel (abandon changes)</a>
-  </div>
-</form>
+    {% for field in form.visible_fields %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field|add_class:'form-control' }}
+        {% for error in field.errors %}
+          <span class="help-inline text-danger">{{ error }}</span>
+        {% endfor %}
+        {% if field.help_text %}
+          <small class="form-text text-muted">{{ field.help_text }}</small>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <div class="form-group">
+      <button type="success" class="btn btn-outline-success"><span class="fa fa-check"></span> Submit</button>
+      <a href="{% url 'prod:product-list' %}" class="btn btn-outline-secondary"><span class="fa fa-times"></span> Cancel (abandon changes)</a>
+    </div>
+
+  </form>
 
 {% endblock %}

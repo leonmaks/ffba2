@@ -2,6 +2,8 @@
 {% load widget_tweaks %}
 {% load i18n static %}
 
+{% load misc_template_lib %}
+
 {% block page_title %}
   Daily Sales
 {% endblock %}
@@ -21,35 +23,35 @@
       <tr>
         <th>Date</th>
         {% comment %} <th>Cashreg</th> {% endcomment %}
-        <th>Expected Value</th>
-        <th>Actual Value</th>
-        <th>Lost Value</th>
+        <th>Act.S.V.</th>
+        <th>Exp.S.V.</th>
+        <th>Dis.S.V.</th>
       </tr>
       {% for rec in object_list %}
         <tr>
             <td>
-              <label for="{{ rec.sales_date }}">{{ rec.sales_date }} <span class="fa fa-angle-down ffba-angle-0"></span></label>
-              <input type="checkbox" name="{{ rec.sales_date }}" id="{{ rec.sales_date }}" data-toggle="ffba-toggle-0" style="display: none">
+              <label for="{{ rec.sdate }}">{{ rec.sdate }} <span class="fa fa-angle-down ffba-angle-0"></span></label>
+              <input type="checkbox" name="{{ rec.sdate }}" id="{{ rec.sdate }}" data-toggle="ffba-toggle-0" style="display: none">
             </td>
-            <td>{{ rec.expected_sales_value }}</td>
-            <td>{{ rec.actual_sales_value }}</td>
-            <td>{{ rec.lost_sales_value }}</td>
+            <td>{{ rec.actual_sales_value|float_format_0_2 }}</td>
+            <td>{{ rec.expected_sales_value|float_format_0_2 }}</td>
+            <td>{{ rec.discount_value|float_format_0_2 }}</td>
         </tr>
         <tbody class="ffba-hide-0" style="display: none">
             {% for cr in rec.cashreg_recs %}
               <tr>
                 <td>
                   {% comment %} {% if perms.sales.xxx %} {% endcomment %}
-                    <a href={% url "sales:day-sales" cashreg_id=cr.cashreg_id year=cr.sales_date.year month=cr.sales_date.month mday=cr.sales_date.day %}>
+                    <a href={% url "sales:day-sales" cashreg_id=cr.cashreg_id year=cr.sdate.year month=cr.sdate.month mday=cr.sdate.day %}>
                       {{ cr.cashreg_identity }}
                     </a>
                   {% comment %} {% else %}
                     {{ cr.cashreg_identity }}
                   {% endif %} {% endcomment %}
                 </td>
-                <td>{{ cr.expected_sales_value }}</td>
-                <td>{{ cr.actual_sales_value }}</td>
-                <td>{{ cr.lost_sales_value }}</td>
+                <td>{{ cr.actual_sales_value|float_format_0_2 }}</td>
+                <td>{{ cr.expected_sales_value|float_format_0_2 }}</td>
+                <td>{{ cr.discount_value|float_format_0_2 }}</td>
               </tr>
             {% endfor %}
         </tbody>

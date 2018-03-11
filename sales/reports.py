@@ -49,19 +49,19 @@ class DailySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
         sales_ = {}
         for s_ in daily_sales_:
 
-            if not sales_ or not sales_["sales_date"] == s_["sales_date"]:
+            if not sales_ or not sales_["sdate"] == s_["sdate"]:
                 sales_ = {
-                    "sales_date": s_["sales_date"],
+                    "sdate": s_["sdate"],
                     "expected_sales_value": 0,
                     "actual_sales_value": 0,
-                    "lost_sales_value": 0,
+                    "discount_value": 0,
                     "cashreg_recs": [],
                 }
                 object_list_.append(sales_)
 
             sales_["expected_sales_value"] += s_["expected_sales_value"]
             sales_["actual_sales_value"] += s_["actual_sales_value"]
-            sales_["lost_sales_value"] += s_["lost_sales_value"]
+            sales_["discount_value"] += s_["discount_value"]
             sales_["cashreg_recs"].append(s_)
 
         ctx_ = {

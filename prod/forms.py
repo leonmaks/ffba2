@@ -11,7 +11,7 @@ class ProductCompositionForm(ModelForm):
         fields = ["product", "weight_initial", "note"]
 
 
-ProductCompositionFormSet = inlineformset_factory(m.Product, m.ProductComposition, form=ProductCompositionForm, fk_name="composition")
+ProductCompositionFormSet = inlineformset_factory(m.Product, m.ProductComposition, form=ProductCompositionForm, fk_name="up")
 
 
 # class ProductForm(ModelForm):

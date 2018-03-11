@@ -22,10 +22,9 @@ class ProductType(m.AuditMixin, m.Root):
 
 class Product(m.AuditMixin, m.Root):
     code = models.CharField(max_length=20, unique=True, null=True, blank=True)
-    # type = models.ForeignKey(ProductType, related_name="products")
     product_type = models.ForeignKey(ProductType, on_delete=models.PROTECT, to_field="code", db_column="product_type_code")
     name = models.CharField(max_length=500)
-    desc = models.CharField(max_length=5000, null=True, blank=True)
+    note = models.CharField(max_length=5000, null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse_lazy("prod:product-list")
@@ -38,9 +37,9 @@ class Product(m.AuditMixin, m.Root):
 
 
 class ProductComposition(m.AuditMixin, m.Root):
-    composition = models.ForeignKey(Product, on_delete=models.PROTECT, to_field="code", db_column="composition_code", related_name="composition")
+    up = models.ForeignKey(Product, on_delete=models.CASCADE, to_field="code", db_column="up_code", related_name="composition")
     product = models.ForeignKey(Product, on_delete=models.PROTECT, to_field="code", db_column="product_code", related_name="product")
-    note = models.TextField(null=True, blank=True)
+    note = models.CharField(max_length=5000, null=True, blank=True)
     weight_initial = models.DecimalField(max_digits=11, decimal_places=5, null=True, blank=True)
     # weight_final = models.DecimalField(max_digits=11, decimal_places=5, null=True, blank=True)
     # weight_reduction = models.DecimalField(max_digits=6, decimal_places=4, null=True, blank=True)

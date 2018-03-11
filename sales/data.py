@@ -5,8 +5,32 @@ def daily_sales():
 
     stmt_ = (
         "SELECT cr.identity AS cashreg_identity,"
+        " cr.id AS cashreg_id,"
+        " s.sales_date::date AS sdate,"
+        " SUM(s.expected_sales_value) AS expected_sales_value,"
+        " SUM(s.actual_sales_value) AS actual_sales_value,"
+        " SUM(s.discount_value) AS discount_value"
+        " FROM ffba_cashreg cr, v$_product_sales s"
+        " WHERE cr.siteguid = s.siteguid"
+        " GROUP BY cashreg_identity, cashreg_id, sdate"
+        " ORDER BY sdate DESC, cashreg_identity ASC"
+    )
+
+    with connection.cursor() as cursor:
+        cursor.execute(stmt_)
+        columns = [col[0] for col in cursor.description]
+        return [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]
+
+
+def daily_sales_SAVED():
+
+    stmt_ = (
+        "SELECT cr.identity AS cashreg_identity,"
         " cr.id cashreg_id,"
-        " r.datenew::date sales_date,"
+        " r.datenew sales_date,"
         " SUM(tl.units * p.pricesell) AS expected_sales_value,"
         " SUM(tl.units * tl.price) AS actual_sales_value,"
         " SUM(tl.units * p.pricesell) - SUM(tl.units * tl.price) AS lost_sales_value"
