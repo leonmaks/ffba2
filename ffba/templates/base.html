@@ -1,65 +1,55 @@
 {% load i18n static %}<!DOCTYPE html>
-
 {% get_current_language as LANGUAGE_CODE %}
 {% get_current_language_bidi as LANGUAGE_BIDI %}
-
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
-
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>{% block title %}{% endblock %}</title>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  {% block css_site %}
+{# SITE_TITLE | page_title #}
+<title>{% block site_title %}SITE_TITLE{% endblock %} / {% block page_title %}Page Title{% endblock %}</title>
 
-  {% block css_bootstrap %}
-      <link rel="stylesheet" href={% static "css/bootstrap.min.css" %}>
-    {% endblock %}
-
-    {% block css_fontawesome %}
-      <link rel="stylesheet" href={% static "css/fontawesome-all.min.css" %}>
-      {% comment %}
-      <script type="text/javascript">
-        (function() {
-          var css = document.createElement('link');
-          css.href = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
-          css.rel = 'stylesheet';
-          css.type = 'text/css';
-          document.getElementsByTagName('head')[0].appendChild(css);
-        })();
-      </script>
-      {% endcomment %}
-    {% endblock %}
-
+{% block site_styles %}
+  {% block bootstrap_styles %}
+    <link rel="stylesheet" href={% static "css/bootstrap.css" %}>
   {% endblock %}
-
-  {% if LANGUAGE_BIDI %}
-    <link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "css/rtl.css" %}{% endblock %}" />
-  {% endif %}
-
-  {% block extrahead %}{% endblock %}
-  {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
-</head>
-
-<body>
-{% load i18n %}
-{% block navbar %}{% endblock %}
-{% block body_content %}{% endblock %}
-
-
-{% block js_site %}
-  {% block js_jquery %}
-    <script src={% static "js/jquery-3.3.1.js" %}></script>
-  {% endblock %}
-  {% block js_bootstrap%}
-    <script src={% static "js/bootstrap.bundle.js" %}></script>
+  {% block page_styles %}{% endblock %}
+  {% block fontawesome_styles %}
+    <link rel="stylesheet" href={% static "css/fontawesome-all.css" %}>
   {% endblock %}
 {% endblock %}
 
-  {% block page_bottom_ext %}
+{% if LANGUAGE_BIDI %}
+  <link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "css/rtl.css" %}{% endblock %}" />
+{% endif %}
+
+{% block extrahead %}{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+
+</head>
+<body>
+
+{% load i18n %}
+{% block header %}{% endblock %}
+{% block body_content %}{% endblock %}
+
+{% block js %}
+  {% block jquery_js %}
+    <script src={% static "js/jquery-3.3.1.js" %}></script>
   {% endblock %}
+  {% block popper_js %}
+    <script src={% static "js/popper.js" %}></script>
+  {% endblock %}
+  {% block bootstrap_js %}
+    <script src={% static "js/bootstrap.bundle.js" %}></script>
+  {% endblock %}
+  {% block site_js %}{% endblock %}
+{% endblock %}
+
+{% block page_bottom_ext %} {% endblock %}
 
 </body>
 </html>

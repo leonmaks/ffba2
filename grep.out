@@ -1,0 +1,92 @@
+sales/data.py:        " FROM ffba_cashreg cr, v$_product_sales s"
+sales/data.py:        " FROM r$_products p, r$_ticketlines tl, r$_receipts r, ffba_cashreg cr"
+sales/data.py:        " FROM ffba_cashreg cr"
+sales/reports.py:            " FROM ffba_cashreg r, ffba_cashreg_log l"
+Binary file sales/__pycache__/data.cpython-36.pyc matches
+Binary file sales/__pycache__/data.cpython-37.pyc matches
+Binary file sales/__pycache__/reports.cpython-36.pyc matches
+Binary file sales/__pycache__/reports.cpython-37.pyc matches
+sql/daily_sales.sql:  FROM ffba_cashreg cr, v$_product_sales s
+sql/ffba_cashreg_data_updates.sql:  from ffba_cashreg_repl_table
+sql/ffba_cashreg_data_updates.sql:  from ffba_cashreg_repl_table
+sql/ffba_cashreg_data_updates.sql:select * from ffba_cashreg;
+sql/productdaysales.sql:select * from ffba_cashreg
+sql/replication_status.sql:select * from ffba_cashreg_log where identity='eltapos_001' order by create_dt desc;
+sql/replication_status.sql:select count(*) from ffba_cashreg_log where identity='eltapos_001';
+sql/replication_status.sql:delete from ffba_cashreg_log where identity='eltapos_001' and id <= 130576;
+sql/replication_status.sql:select * from ffba_cashreg_log where identity='eltapos_002' order by create_dt desc;
+sql/replication_status.sql:select count(*) from ffba_cashreg_log where identity='eltapos_002';
+sql/replication_status.sql:delete from ffba_cashreg_log where identity='eltapos_002' and id <= 149116;
+sql/replication_status.sql:select * from ffba_cashreg_log where identity='eltapos_003' order by create_dt desc;
+sql/replication_status.sql:select count(*) from ffba_cashreg_log where identity='eltapos_003';
+sql/replication_status.sql:delete from ffba_cashreg_log where identity='eltapos_003' and id <= 149586;
+sql/replication_status.sql:select * from ffba_cashreg_log order by create_dt desc;
+sql/replication_status.sql:select * from ffba_cashreg_log where identity='eltapos_002' and level_name = 'ERROR' order by create_dt desc;
+sql/replication_status.sql:select identity, count(*) from ffba_cashreg_log group by identity;
+sql/replication_status.sql:delete from ffba_cashreg_log where identity='eltapos_001' and id <= 26712;
+sql/replication_status.sql:delete from ffba_cashreg_log where identity='eltapos_002' and id <= 20274;
+sql/replication_status.sql:delete from ffba_cashreg_log where identity='eltapos_002';
+sql/replication_status.sql:delete from ffba_cashreg_log where create_dt <= '2017-09-03 23:59:59';
+sql/replication_status.sql:CREATE TABLE ffba_cashreg_repl_table (id serial NOT NULL, table_name character varying(63) NOT NULL, last_repl_id bigint NOT NULL, last_update_dt timestamp with time zone, cashreg_id integer NOT NULL);
+sql/replication_status.sql:DELETE FROM ffba_cashreg_repl_table r WHERE r.cashreg_id = 4 AND r.table_name = 'draweropened';
+sql/replication_status.sql:grant select on ffba_cashreg_action to ffba_cashreg_role;
+sql/replication_status.sql:grant select, update on ffba_cashreg_action_exec to ffba_cashreg_role;
+sql/replication_status.sql:grant select on pg_authid to ffba_cashreg_role;
+sql/replication_status.sql:GRANT USAGE, SELECT ON SEQUENCE ffba_cashreg_repl_table_id_seq TO ffba_cashreg_role;
+sql/replication_status.sql:grant select, insert, update, delete on ffba_cashreg_repl_table to ffba_cashreg_role;
+sql/replication_status.sql:revoke select, insert, update on ffba_cashreg_action from ffba_cashreg_role;
+sql/replication_status.sql:revoke select, update on ffba_cashreg_action_exec from ffba_cashreg_role;
+sql/replication_status.sql:grant select, insert, update on ffba_cashreg_module_deploy to ffba_cashreg_role;
+sql/replication_status.sql:grant execute on FUNCTION ffba_cashreg_get_config(integer) to ffba_cashreg_role;
+sql/replication_status.sql:grant select on ffba_cashreg_config to ffba_cashreg_role;
+sql/replication_status.sql:select * from ffba_cashreg_module;
+sql/replication_status.sql:insert into ffba_cashreg_module (create_dt, name, content, status, create_user_id, root) values (now(), 'tittles.py', '', 'A', 2, false);
+sql/replication_status.sql:CREATE TABLE ffba_cashreg_config (id serial NOT NULL, create_dt timestamp with time zone NOT NULL, modify_dt timestamp with time zone, db_user_current character varying(100) NOT NULL, db_pass_current character varying(100) NOT NULL, db_name_current character varying(100) NOT NULL, db_host_current character varying(100) NOT NULL, cashreg_id integer NOT NULL, create_user_id integer NOT NULL, modify_user_id integer);
+sql/replication_status.sql:CREATE TABLE ffba_cashreg_config_history (id integer NOT NULL, create_dt timestamp with time zone NOT NULL, modify_dt timestamp with time zone, db_user_current character varying(100) NOT NULL, db_pass_current character varying(100) NOT NULL, db_name_current character varying(100) NOT NULL, db_host_current character varying(100) NOT NULL, history_id serial NOT NULL, history_date timestamp with time zone NOT NULL, history_type character varying(1) NOT NULL, cashreg_id integer, create_user_id integer, history_user_id integer, modify_user_id integer);
+sql/replication_status.sql:alter table ffba_cashreg_config set (db_name_current null, db_host_current is null);
+sql/replication_status.sql:ALTER TABLE ffba_cashreg_config_history ALTER COLUMN db_name_current DROP NOT NULL;
+sql/replication_status.sql:ALTER TABLE ffba_cashreg_config_history ALTER COLUMN db_host_current DROP NOT NULL;
+sql/replication_status.sql:CREATE OR REPLACE FUNCTION ffba_cashreg_get_config(_cashreg_id integer)
+sql/replication_status.sql:    FROM ffba_cashreg_config c
+sql/replication_status.sql:select * from ffba_cashreg_get_config(4);
+sql/replication_status.sql:select * from ffba_cashreg_log where id >= 51546 and identity='eltapos_001' order by create_dt desc;
+sql/replication_status.sql:select count(*) from ffba_cashreg_log where identity='eltapos_001';
+sql/replication_status.sql:delete from ffba_cashreg_log where identity='eltapos_001' and id < 51546;
+sql/replication_status.sql:select * from ffba_cashreg_log where id >= 51547 and identity='eltapos_002' order by create_dt desc;
+sql/replication_status.sql:select count(*) from ffba_cashreg_log where identity='eltapos_002';
+sql/replication_status.sql:delete from ffba_cashreg_log where identity='eltapos_002' and id < 51547;
+sql/replication_status.sql:select * from ffba_cashreg_log where id >= 51548 and identity='eltapos_003' order by create_dt desc;
+sql/replication_status.sql:select count(*) from ffba_cashreg_log where identity='eltapos_003';
+sql/replication_status.sql:delete from ffba_cashreg_log where identity='eltapos_003' and id < 51548;
+sql/replication_status.sql:select * from ffba_cashreg_log order by create_dt desc;
+sql/replication_status.sql:select * from ffba_cashreg_log where identity='eltapos_002' and level_name = 'ERROR' order by create_dt desc;
+sql/replication_status.sql:select identity, count(*) from ffba_cashreg_log group by identity;
+sql/replication_status.sql:delete from ffba_cashreg_log where identity='eltapos_001' and id <= 26712;
+sql/replication_status.sql:delete from ffba_cashreg_log where identity='eltapos_002' and id <= 20274;
+sql/replication_status.sql:delete from ffba_cashreg_log where identity='eltapos_002';
+sql/replication_status.sql:delete from ffba_cashreg_log where create_dt <= '2017-09-03 23:59:59';
+sql/replication_status.sql:CREATE TABLE ffba_cashreg_repl_table (id serial NOT NULL, table_name character varying(63) NOT NULL, last_repl_id bigint NOT NULL, last_update_dt timestamp with time zone, cashreg_id integer NOT NULL);
+sql/replication_status.sql:DELETE FROM ffba_cashreg_repl_table r WHERE r.cashreg_id = 4 AND r.table_name = 'draweropened';
+sql/replication_status.sql:grant select on ffba_cashreg_action to ffba_cashreg_role;
+sql/replication_status.sql:grant select, update on ffba_cashreg_action_exec to ffba_cashreg_role;
+sql/replication_status.sql:grant select on pg_authid to ffba_cashreg_role;
+sql/replication_status.sql:GRANT USAGE, SELECT ON SEQUENCE ffba_cashreg_repl_table_id_seq TO ffba_cashreg_role;
+sql/replication_status.sql:grant select, insert, update, delete on ffba_cashreg_repl_table to ffba_cashreg_role;
+sql/replication_status.sql:revoke select, insert, update on ffba_cashreg_action from ffba_cashreg_role;
+sql/replication_status.sql:revoke select, update on ffba_cashreg_action_exec from ffba_cashreg_role;
+sql/replication_status.sql:grant select, insert, update on ffba_cashreg_module_deploy to ffba_cashreg_role;
+sql/replication_status.sql:grant execute on FUNCTION ffba_cashreg_get_config(integer) to ffba_cashreg_role;
+sql/replication_status.sql:grant select on ffba_cashreg_config to ffba_cashreg_role;
+sql/replication_status.sql:select * from ffba_cashreg_module;
+sql/replication_status.sql:insert into ffba_cashreg_module (create_dt, name, content, status, create_user_id, root) values (now(), 'tittles.py', '', 'A', 2, false);
+sql/replication_status.sql:CREATE TABLE ffba_cashreg_config (id serial NOT NULL, create_dt timestamp with time zone NOT NULL, modify_dt timestamp with time zone, db_user_current character varying(100) NOT NULL, db_pass_current character varying(100) NOT NULL, db_name_current character varying(100) NOT NULL, db_host_current character varying(100) NOT NULL, cashreg_id integer NOT NULL, create_user_id integer NOT NULL, modify_user_id integer);
+sql/replication_status.sql:CREATE TABLE ffba_cashreg_config_history (id integer NOT NULL, create_dt timestamp with time zone NOT NULL, modify_dt timestamp with time zone, db_user_current character varying(100) NOT NULL, db_pass_current character varying(100) NOT NULL, db_name_current character varying(100) NOT NULL, db_host_current character varying(100) NOT NULL, history_id serial NOT NULL, history_date timestamp with time zone NOT NULL, history_type character varying(1) NOT NULL, cashreg_id integer, create_user_id integer, history_user_id integer, modify_user_id integer);
+sql/replication_status.sql:alter table ffba_cashreg_config set (db_name_current null, db_host_current is null);
+sql/replication_status.sql:ALTER TABLE ffba_cashreg_config_history ALTER COLUMN db_name_current DROP NOT NULL;
+sql/replication_status.sql:ALTER TABLE ffba_cashreg_config_history ALTER COLUMN db_host_current DROP NOT NULL;
+sql/replication_status.sql:CREATE OR REPLACE FUNCTION ffba_cashreg_get_config(_cashreg_id integer)
+sql/replication_status.sql:    FROM ffba_cashreg_config c
+sql/replication_status.sql:select * from ffba_cashreg_get_config(4);
+sql/repl_down_prep.sql:select * from ffba_cashreg;
+sql/rpt_temp.sql:  FROM r$_products p, r$_ticketlines tl, r$_receipts r, ffba_cashreg cr
+sql/sales_reps.sql:  FROM ffba_cashreg cr, v$_product_sales s

@@ -6,31 +6,34 @@ from misc import models as m
 
 
 class ProductType(m.AuditMixin, m.Root):
-    code = models.CharField(max_length=20, unique=True)
-    name = models.CharField(max_length=500, unique=True)
-    show_order = models.CharField(max_length=50, null=True, blank=True)
+    code = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=1000, unique=True)
+    show_order = models.CharField(max_length=100, null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse_lazy("prod:product-type-list")
 
     def __str__(self):
-        return self.name
+        return "%s (%s)" % (self.name, self.code)
 
     class Meta:
         db_table = "ffba_product_type"
 
 
 class Product(m.AuditMixin, m.Root):
-    code = models.CharField(max_length=20, unique=True, null=True, blank=True)
+    code = models.CharField(max_length=50, unique=True, null=True, blank=True)
     product_type = models.ForeignKey(ProductType, on_delete=models.PROTECT, to_field="code", db_column="product_type_code")
-    name = models.CharField(max_length=500)
-    note = models.CharField(max_length=5000, null=True, blank=True)
+    name = models.CharField(max_length=1000)
+    # note = models.CharField(max_length=5000, null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse_lazy("prod:product-list")
 
+    def get_code(self):
+        return self.code and self.code or "ID_%s" % (self.id)
+
     def __str__(self):
-        return self.name
+        return "%s" % (self.name, )
 
     class Meta:
         db_table = "ffba_product"
@@ -46,8 +49,13 @@ class ProductComposition(m.AuditMixin, m.Root):
     # weight_initial_per_gram = models.DecimalField(max_digits=11, decimal_places=5, null=True, blank=True)
     # weight_final_per_gram = models.DecimalField(max_digits=11, decimal_places=5, null=True, blank=True)
 
+    def get_absolute_url(self):
+        return reverse_lazy("prod:product-composition-list")
+
     class Meta:
         db_table = "ffba_product_composition"
+        unique_together = (("up", "product"), )
+
 
 #
 #	#def get_absolute_url(self):

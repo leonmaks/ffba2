@@ -1,0 +1,27 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Project One</title>
+  <link rel="stylesheet" type="text/css" href="{% static "semantic-dist/semantic.css" %}" />
+  <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" />
+  <script src={% static "vendor/babel-standalone.js" %}></script>
+  <script src={% static "vendor/react.js" %}></script>
+  <script src={% static "vendor/react-dom.js" %}></script>
+  <script src={% static "vendor/uuid.js" %}></script>
+  <script src={% static "vendor/fetch.js" %}></script>
+</head>
+
+<body>
+  <div id="main" class="main ui">
+    <h1 class="ui dividing centered header">Timers</h1>
+    <div id="content"></div>
+  </div>
+  <script type="text/babel" src={% static "js/client.js" %}></script>
+  <script type="text/babel" src={% static "js/helpers.js" %}></script>
+  <script type="text/babel" data-plugins="transform-class-properties" src={% static "js/app.js" %}></script>
+</body>
+
+</html>

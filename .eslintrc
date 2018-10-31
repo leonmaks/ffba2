@@ -1,0 +1,12 @@
+{
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": [
+          "ffba/react-js"
+        ]
+      }
+    }
+  },
+  "parser": "babel-eslint"
+}

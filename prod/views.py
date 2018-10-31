@@ -1,10 +1,10 @@
-from django.views.generic import ListView, CreateView, UpdateView, FormView
-from django.views.generic.edit import SingleObjectMixin
+from django.views.generic import ListView, CreateView, UpdateView
+# from django.views.generic.edit import SingleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.urls import reverse_lazy
+# from django.urls import reverse_lazy
 
-from misc.edit import MasterDetailEditView
-from . import forms as f
+# from misc.edit import MasterDetailEditView
+# from . import forms as f
 from . import models as m
 
 
@@ -14,7 +14,7 @@ class ProductTypeList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = "prod/product_type_list.html"
 
     def get_queryset(self):
-        return m.ProductType.objects.order_by("code")
+        return m.ProductType.objects.order_by("show_order")
 
 
 class ProductTypeCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -43,32 +43,51 @@ class ProductList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 class ProductCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = ("prod.product_create")
     model = m.Product
-    fields = ["name", "note", "product_type", "code"]
+    fields = ["name", "product_type", "code"]
     template_name = "prod/product.html"
 
 
 class ProductUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     permission_required = ("prod.product_update")
     model = m.Product
-    fields = ["name", "note", "product_type", "code"]
+    fields = ["name", "product_type", "code"]
     template_name = "prod/product.html"
 
 
-class ProductCompositionEdit(LoginRequiredMixin, PermissionRequiredMixin, MasterDetailEditView):
+class ProductCompositionList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     permission_required = ("prod.product_composition_list")
-    model = m.Product
-    fields = ["name", "note", "product_type", "code"]
-    detail_formset_class = f.ProductCompositionFormSet
-    detail_queryset = m.ProductComposition.objects.filter(up__exact=27)
-    template_name = "prod/product_composition_edit.html"
-    success_url = reverse_lazy("prod:product-composition-edit")
-    product_composition = None
+    model = m.ProductComposition
+    template_name = "prod/product_composition_list.html"
 
-    def get_success_url(self):
-        url_ = super(ProductCompositionEdit, self).get_success_url()
-        if self.object:
-            url_ += str(self.object.pk)
-        return url_
+    # def get_queryset(self):
+    #     return m.ProductComposition.objects.order_by("show_order")
+
+
+class ProductCompositionCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = ("prod.product_composition_create")
+    model = m.ProductComposition
+    fields = ["up", "product", "note", "weight_initial"]
+    template_name = "prod/product_composition.html"
+
+
+# class ProductCompositionEdit(LoginRequiredMixin, PermissionRequiredMixin, MasterDetailEditView):
+#     permission_required = ("prod.product_composition_list")
+#     model = m.Product
+#     fields = ["name", "note", "product_type", "code"]
+#     detail_formset_class = f.ProductCompositionFormSet
+#     detail_queryset = m.ProductComposition.objects.filter(up__exact=27)
+#     template_name = "prod/product_composition_edit.html"
+#     success_url = reverse_lazy("prod:product-composition-edit")
+#     product_composition = None
+
+#     def get_success_url(self):
+#         url_ = super(ProductCompositionEdit, self).get_success_url()
+#         if self.object:
+#             url_ += str(self.object.pk)
+#         return url_
+
+
+
 
     # def get_context_data(self, **kwargs):
     #     context_ = super(ProductCompositionEdit, self).get_context_data(**kwargs)

@@ -1,0 +1,53 @@
+{% extends "base_site.html" %}
+{% load widget_tweaks %}
+{% load i18n static %}
+
+{% block page_title %}
+  Product List
+{% endblock %}
+
+
+{% block page_content %}
+  <h1>Product Composition List</h1>
+
+  {% comment %}
+  {% if perms.prod.product_create %}
+    <p>
+      <a href={% url "prod:product-create" %}><span class="fa fa-plus"></span> Create</a>
+    </p>
+  {% endif %}
+  {% endcomment %}
+
+{% if object_list %}
+  <table class="table">
+    <tr>
+      <th>Up</th>
+      <th>Product</th>
+      <th>Note</th>
+      <th>Weight Initial</th>
+      <th>#</th>
+    </tr>
+
+    {% for rec in object_list %}
+      <tr>
+        <td>{{ rec.up }}</td>
+        <td>{{ rec.product }}</td>
+        <td>{{ rec.note }}</td>
+        <td>{{ rec.weight_initial }}</td>
+        <td>
+{#          <{% if perms.prod.product_update %} #}
+{#            <a href={% url "prod:product-update" pk=rec.id %}>{{ rec.id }}</a> #}
+{#          {% else %} #}
+            {{ rec.id }}
+{#          {% endif %} #}
+        </td>
+        {% for r in rec.fields %}
+          {{ r.label }}
+        {% endfor %}
+      </tr>
+    {% endfor %}
+    </table>
+  {% else %}
+    {% trans "No records" %}
+  {% endif %}
+{% endblock %}

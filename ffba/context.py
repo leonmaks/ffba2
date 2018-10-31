@@ -1,4 +1,4 @@
-from django.conf import settings # import the settings file
+from django.conf import settings
 
 
 # Site settings
@@ -6,7 +6,7 @@ from django.conf import settings # import the settings file
 SITE_TITLE = "FFBA"
 
 
-def site_settings(request): # pylint: disable-msg=W0613
+def site_settings(request):
     return {
         "SITE_TITLE": SITE_TITLE,
     }

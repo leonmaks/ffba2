@@ -1,0 +1,35 @@
+{
+  "name": "ffba-front",
+  "version": "0.0.1",
+  "description": "Food Factory Business Autimation Front-end",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development --config webpack.config.js --watch",
+    "prod": "webpack --mode production --config webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Leon Maksim",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^1.0.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "prop-types": "^15.6.2",
+    "style-loader": "^0.22.1",
+    "webpack": "^4.16.0",
+    "webpack-cli": "^3.0.8"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "postcss-flexbugs-fixes": "^4.1.0",
+    "postcss-loader": "^3.0.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "save-dev": "^2.0.0"
+  }
+}

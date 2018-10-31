@@ -39,43 +39,38 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # 3-rd party apps
+    # "webpack_loader", # TODO: delete - seems it is not needed
     "widget_tweaks",
     "debug_toolbar",
+    "rest_framework",
+    "corsheaders",
     # my apps
     "misc",
+    "todo",
     "org",
     "prod",
     "sales",
     "ae",
+    "restut",
+    "novelty",          # TODO: delete
+    "ponynote",         # TODO: delete
+    "timetr",           # TODO: delete
+    "tt",               # TODO: delete
 ]
 
 # INSTALLED_APPS = [
 #     # third party apps
-#     "rest_framework",
-# #     "betterforms",
-#     "widget_tweaks",
 #     "simple_history",
 # #     "mptt",
 #     "webpack_loader", # django-react integration
-#     # my apps
-#     "adm",
-#     "misc",
-#     "snippets",
-#     "org",
-#     "hr",
-#     "acc",
-#     "cashreg",
-#     "prod",
-#     "crm",
-#     "pos",
-#     "repl",
-#     "djreact",
 # ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
+    # "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -87,6 +82,11 @@ MIDDLEWARE = [
 ]
 
 
+CORS_ORIGIN_WHITELIST = (
+    "localhost:3000/"
+)
+
+
 ROOT_URLCONF = "ffba.urls"
 
 TEMPLATES = [
@@ -94,8 +94,11 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             os.path.join(BASE_DIR, "ffba/templates"),
+            os.path.join(BASE_DIR, "sales/templates/sales"),
             os.path.join(BASE_DIR, "prod/templates"),
             os.path.join(BASE_DIR, "ae/templates"),
+            os.path.join(BASE_DIR, "ponynote/templates"),
+            os.path.join(BASE_DIR, "timetr/templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -111,16 +114,6 @@ TEMPLATES = [
     },
 ]
 
-# TEMPLATES = [
-#     {
-#         "OPTIONS": {
-#             "debug": True,
-#                 # my context processors
-#                 # "prod.context_processors.messages",
-#             ],
-#         },
-#     },
-# ]
 
 WSGI_APPLICATION = "wsgi.application"
 
@@ -176,6 +169,8 @@ STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "ffba/static"),
+    os.path.join(BASE_DIR, "timetr/static"),    # TODO: delete
+    os.path.join(BASE_DIR, "tt/static"),    # TODO: delete
 ]
 
 STATIC_ROOT = "/usr/home/ffba/.wsp/ffba_test/ffba2/static_root"
@@ -186,16 +181,22 @@ LOGOUT_URL = "/logout/"
 
 DATE_FORMAT = "%d.%m.%Y"
 
-# REST_FRAMEWORK = {
-#     "DEFAULT_PERMISSION_CLASSES": [
-#         "rest_framework.permissions.IsAdminUser",
-#     ],
-#     "PAGE_SIZE": 10
-# }
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+        # "rest_framework.permissions.IsAdminUser",
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    # "PAGE_SIZE": 10
+}
+
 
 # WEBPACK_LOADER = {
 #     "DEFAULT": {
-#         "BUNDLE_DIR_NAME": "bundles/local/",  # end with slash
-#         "STATS_FILE": os.path.join(BASE_DIR, "webpack-stats-local.json"),
+#         "BUNDLE_DIR_NAME": "bundles/",
+#         "STATS_FILE": os.path.join(BASE_DIR, "webpack-stats.dev.json"),
 #     }
 # }

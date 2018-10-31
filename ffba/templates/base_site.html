@@ -1,12 +1,132 @@
 {% extends "base.html" %}
 {% load i18n static %}
 
-{# SITE_TITLE | page_title #}
-{% block title %}
-  {{ SITE_TITLE }} / {% block page_title %}Page Title{% endblock %}
+{% block site_title %}
+  ELTA
 {% endblock %}
 
+{% block header %}
+<header>
+  <nav class="navbar navbar-expand-md navbar-light bg-light rounded">
 
+    <a class="navbar-brand" href="{% url 'home' %}" aria-label="ELTA">{% trans "ELTA" %}</a>
+
+    <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarTop" aria-controls="navbarTop" aria-expanded="false" aria-label={% trans "Toggle navigation" %}>
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarTop">
+
+      <ul class="navbar-nav mr-auto">
+
+        {% comment %}
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Dummy <span class="sr-only">(current)</span></a>
+        </li>
+        {% endcomment %}
+
+        {# MENU Sales #}
+        {% if perms.sales %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="sales_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% trans "Sales" %}</a>
+            <div class="dropdown-menu" aria-labelledby="sales_dropdown">
+
+              {# {% if perms.prod.product_list %} #}
+              <a class="dropdown-item" href="{% url 'sales:sales' %}">{% trans "Sales New" %}</a>
+              {# {% endif %} #}
+
+              {# {% if perms.prod.product_list %} #}
+                <a class="dropdown-item" href="{% url 'sales:totals-by-date' %}">{% trans "Totals by Date (old)" %}</a>
+              {# {% endif %} #}
+
+              {% comment %}
+              {% if perms.prod.product_type_list %}
+                <a class="dropdown-item" href="{% url 'prod:product-type-list' %}">{% trans "Product Types" %}</a>
+              {% endif %}
+              {% endcomment %}
+
+            </div>
+          </li>
+        {% endif %}
+
+        {# MENU Products #}
+        {% comment %}
+        {% if perms.prod %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="prod_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% trans "Products" %}</a>
+            <div class="dropdown-menu" aria-labelledby="prod_dropdown">
+
+              {% if perms.prod.product_list %}
+                <a class="dropdown-item" href="{% url 'prod:product-list' %}">{% trans "Products" %}</a>
+              {% endif %}
+
+              {% if perms.prod.product_type_list %}
+                <a class="dropdown-item" href="{% url 'prod:product-type-list' %}">{% trans "Product Types" %}</a>
+              {% endif %}
+
+            </div>
+          </li>
+        {% endif %}
+        {% endcomment %}
+
+        {# MENU AE #}
+        {% comment %}
+        {% if perms.ae %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="ae_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% trans "AE" %}</a>
+            <div class="dropdown-menu" aria-labelledby="ae_dropdown">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              {% if perms.ae.cash_record_list %}
+                <a class="dropdown-item" href="{% url 'ae:cash-record-list' %}">{% trans "Daily Cash" %}</a>
+              {% endif %}
+            </div>
+          </li>
+        {% endif %}
+        {% endcomment %}
+
+
+      </ul> {# top menu #}
+
+      {% comment %}
+      TODO +search engine on site level
+      <form class="form-inline mt-2 mt-md-0">
+        <input class="form-control mr-sm-2" type="text" placeholder={% trans "Search" %} aria-label={% trans "Search" %}>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">{% trans "Search" %}</button>
+      </form>
+      {% endcomment %}
+
+      {% if user.is_authenticated %}
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="settingsTop" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              {% if user.first_name or user.last_name %}
+                {{user.first_name}} {{user.last_name}}
+              {% else %}
+                {{ user.username }}
+              {% endif %}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right text-right" aria-labelledby="settingsTop">
+              <a class="dropdown-item" href="#">{% trans "Password Change" %}</a>
+              {% comment %} <a href="{% url 'password-change' %}">{% trans "Password Change" %}</a> {% endcomment %}
+              {% comment %} <li role="separator" class="divider"></li> {% endcomment %}
+              <a class="dropdown-item" href="{% url 'logout' %}">{% trans "Logout" %}</a>
+              {% comment %} <li role="separator" class="divider"></li> {% endcomment %}
+              <a class="dropdown-item" href="{% url 'about' %}">{% trans "About" %}</a>
+              {% comment %} <li><a href="{% url 'about' %}">{% trans "About" %}</a></li> {% endcomment %}
+            </div>
+          </li>
+        </ul>
+      {% else %}
+        <a class="nav-link" href="{% url 'login' %}">{% trans "Login" %} <span class="sr-only">(current)</span></a>
+      {% endif %}
+
+    </div>
+  </nav>
+</header>
+{% endblock %}
+
+{% comment %}
 {% block navbar %}
   {% if user.is_authenticated %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
@@ -17,18 +137,6 @@
 
       <div class="collapse navbar-collapse" id="navbarTop">
         <ul class="navbar-nav mr-auto">
-
-          {% comment %}
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-          </li>
-          {% endcomment %}
 
           {# MENU Products #}
           {% if perms.prod %}
@@ -53,8 +161,6 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="ae_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% trans "AE" %}</a>
               <div class="dropdown-menu" aria-labelledby="ae_dropdown">
-                {% comment %} <a class="dropdown-item" href="#">Action</a> {% endcomment %}
-                {% comment %} <a class="dropdown-item" href="#">Another action</a> {% endcomment %}
                 {% if perms.ae.cash_record_list %}
                   <a class="dropdown-item" href="{% url 'ae:cash-record-list' %}">{% trans "Daily Cash" %}</a>
                 {% endif %}
@@ -74,12 +180,8 @@
               </a>
               <div class="dropdown-menu dropdown-menu-right text-right" aria-labelledby="settingsTop">
                 <a class="dropdown-item" href="#">{% trans "Password Change" %}</a>
-                {% comment %} <a href="{% url 'password-change' %}">{% trans "Password Change" %}</a> {% endcomment %}
-                {% comment %} <li role="separator" class="divider"></li> {% endcomment %}
                 <a class="dropdown-item" href="{% url 'logout' %}">{% trans "Logout" %}</a>
-                {% comment %} <li role="separator" class="divider"></li> {% endcomment %}
                 <a class="dropdown-item" href="{% url 'about' %}">{% trans "About" %}</a>
-                {% comment %} <li><a href="{% url 'about' %}">{% trans "About" %}</a></li> {% endcomment %}
               </div>
             </li>
           </ul>
@@ -87,11 +189,13 @@
     </nav>
   {% endif %}
 {% endblock %}
-
+{% endcomment %}
 
 {% block body_content %}
-  <div class="container">
-    {% block page_content %}
-    {% endblock %}
-  </div>
+  {% block page_content %}
+  {% endblock %}
+{% endblock %}
+
+{% block site_js %}
+  {% block page_js %}{% endblock %}
 {% endblock %}

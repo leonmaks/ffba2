@@ -10,9 +10,10 @@ from . import data as d
 
 
 class SalesDataByOrgUnit(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    permission_required = ("rpt.xxx")
+    # TODO: add permission to run SalesDataByOrgUnit report
+    permission_required = ("sales.xxx")
 
-    template_name = "rpt/sales_data_by_org_unit.html"
+    template_name = "sales/sales_data_by_org_unit.html"
 
     def fetch_data(self):
 
@@ -36,18 +37,19 @@ class SalesDataByOrgUnit(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
         return self.render_to_response({"object_list": self.fetch_data()})
 
 
-class DailySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    permission_required = ("rpt.xxx")
+class TotalsByDate(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+    # TODO: add permission to run TotalsByDate report
+    permission_required = ("sales.xxx")
 
-    template_name = "rpt/daily_sales.html"
+    template_name = "sales/totals_by_date.html"
 
     def get_context_data(self, **kwargs):
 
-        daily_sales_ = d.daily_sales()
+        totals_by_date_ = d.totals_by_date()
 
         object_list_ = []
         sales_ = {}
-        for s_ in daily_sales_:
+        for s_ in totals_by_date_:
 
             if not sales_ or not sales_["sdate"] == s_["sdate"]:
                 sales_ = {
@@ -75,9 +77,10 @@ class DailySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 
 
 class DaySales(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    permission_required = ("rpt.xxx")
+    # TODO: add permission to run DaySales report
+    permission_required = ("sales.xxx")
 
-    template_name = "rpt/day_sales.html"
+    template_name = "sales/day_sales.html"
 
     def get_context_data(self, **kwargs):
         date_ = date(int(kwargs["year"]), int(kwargs["month"]), int(kwargs["mday"]))

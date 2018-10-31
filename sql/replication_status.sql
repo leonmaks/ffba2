@@ -5,12 +5,12 @@ delete from ffba_cashreg_log where identity='eltapos_001' and id <= 130576;
 
 select * from ffba_cashreg_log where identity='eltapos_002' order by create_dt desc;
 select count(*) from ffba_cashreg_log where identity='eltapos_002';
-delete from ffba_cashreg_log where identity='eltapos_002' and id <= 130704;
+delete from ffba_cashreg_log where identity='eltapos_002' and id <= 149116;
 
 
 select * from ffba_cashreg_log where identity='eltapos_003' order by create_dt desc;
 select count(*) from ffba_cashreg_log where identity='eltapos_003';
-delete from ffba_cashreg_log where identity='eltapos_003' and id <= 130742;
+delete from ffba_cashreg_log where identity='eltapos_003' and id <= 149586;
 
 
 select * from ffba_cashreg_log order by create_dt desc;
