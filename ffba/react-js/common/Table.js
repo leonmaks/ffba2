@@ -5,7 +5,7 @@ import TBody from "common/table/TBody"
 
 const Table = (props) => {
 
-  let classes_ = "table"
+  let classes_ = "table table-hover"
   if (props.classes) classes_ += " " + props.classes
 
   let headings_ = null

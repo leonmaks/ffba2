@@ -173,7 +173,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "tt/static"),    # TODO: delete
 ]
 
-STATIC_ROOT = "/usr/home/ffba/.wsp/ffba_test/ffba2/static_root"
+STATIC_ROOT = "/home/ffba/wsp/ffba2/static_root"
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
