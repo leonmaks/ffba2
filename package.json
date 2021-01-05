@@ -25,7 +25,7 @@
     "webpack-cli": "^3.0.8"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-loader": "^3.0.0",
     "react": "^16.4.1",
